@@ -1,0 +1,10 @@
+# ninja log v6
+8	167	7536248278843796	CMakeFiles/Deathstar_Deluxe_HK.dir/Test.c.obj	de78e0fc8eaaf9d1
+13	361	7536240765446072	CMakeFiles/Deathstar_Deluxe_HK.dir/main.c.obj	de31943aadff4513
+168	360	7536248280441738	Deathstar_Deluxe_HK.exe	f9434090814e6161
+6	1068	7536252713594600	build.ninja	2d63d840e1cf3071
+4	480	7536252713594600	build.ninja	2d63d840e1cf3071
+49	252	7536252715579686	CMakeFiles/Deathstar_Deluxe_HK.dir/main.c.obj	de31943aadff4513
+253	439	7536252717619008	Deathstar_Deluxe_HK.exe	bc311fecf7db0867
+11	254	7536254179247473	CMakeFiles/Deathstar_Deluxe_HK.dir/main.c.obj	de31943aadff4513
+255	451	7536254181683536	Deathstar_Deluxe_HK.exe	bc311fecf7db0867
