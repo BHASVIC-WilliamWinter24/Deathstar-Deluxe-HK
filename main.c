@@ -3,8 +3,9 @@
 #include <time.h>
 #include <string.h>
 #include <unistd.h>
+#include <ctype.h>
 
-int users[6][6] = {{0, 0, 0, 0, 0, 0}, // Room 1: dateOfBirth, adults, children, boardType, newspaper, lengthOfStay
+int user[6][6] = {{0, 0, 0, 0, 0, 0}, // Room 1: dateOfBirth, adults, children, boardType, newspaper, lengthOfStay
                   {0, 0, 0, 0, 0, 0},  // Room 2
                   {0, 0, 0, 0, 0, 0},  // Room 3
                   {0, 0, 0, 0, 0, 0},  // Room 4
@@ -13,6 +14,9 @@ int users[6][6] = {{0, 0, 0, 0, 0, 0}, // Room 1: dateOfBirth, adults, children,
 
 char names[6][2][20]; // [roomNumber-1][f/s][max characters]
 char IDs[6][23]; // [roomNumber-1][max characters]
+
+char bookedTables[3][2][24]; // for bookTable
+char id[23]; // for bookTable
 
 // CHECK IN SUBROUTINES //
 void checkIn();
@@ -36,7 +40,7 @@ void displayBookedTables();
 
 int main(void) {
   char choice;
-  int loop = 1;
+  int loop;
   do {
     printf("Welcome to Hotel Kashyyyk, property of Deathstar Deluxe!\n");
     printf("Would you like to:\nCheck In (1)\nBook a Table (2)\nCheck Out (3)\nQuit (4)\n");
@@ -46,7 +50,7 @@ int main(void) {
       checkIn();
     }
     else if (choice == 2) {
-      //bookTable();
+      bookTable();
     }
     else if (choice == 3) {
       checkOut();
@@ -59,7 +63,6 @@ int main(void) {
     }
     loop = 1;
   } while (loop == 1); // loop infinitely
-  return 0;
 }
 
 void checkIn() {
@@ -80,7 +83,7 @@ void checkIn() {
     valid = 1; // currently valid
     printf("\nEnter your date of birth in the form DDMMYY: ");
     fflush(stdin);
-    scanf("%d", &dateOfBirth); // take input to date of birth variabl
+    scanf("%d", &dateOfBirth); // take input to date of birth variable
     if (dateOfBirth >= 1000000 || dateOfBirth <= 100000) { // if the length is above or below 6 digits
       printf("Input is not in the form DDMMYY\n");
       valid = 0; // not a valid input
@@ -129,7 +132,7 @@ void checkIn() {
   } while (valid == 0); // loop while invalid
   printf("\n\nAvailable Rooms:");
   for (int i = 0; i < 6; i++) { // iterate through the rooms
-    if (users[i][5] == 0) { // if room is empty (no length of stay)
+    if (user[i][5] == 0) { // if room is empty (no length of stay)
       if (i == 0) { // this if statement shows which rooms are available, and their prices
         printf("\nRoom 1 - 100 creds per day");
       }
@@ -160,7 +163,7 @@ void checkIn() {
       valid = 0; // invalid
     }
     else {
-      if (users[roomNumber-1][5] != 0) { // if lengthOfStay for that room is not zero - it is in use
+      if (user[roomNumber-1][5] != 0) { // if lengthOfStay for that room is not zero - it is in use
         printf("Room number %d is already in use", roomNumber);
         valid = 0; // invalid
       }
@@ -252,12 +255,12 @@ void checkIn() {
   for (int i = 0; i < strlen(bookingID); i++) { // print booking ID
     printf("%c", bookingID[i]);
   }
-  users[roomNumber-1][0] = dateOfBirth;
-  users[roomNumber-1][1] = adults;
-  users[roomNumber-1][2] = children;
-  users[roomNumber-1][3] = boardType;
-  users[roomNumber-1][4] = newspaper;
-  users[roomNumber-1][5] = lengthOfStay;
+  user[roomNumber-1][0] = dateOfBirth;
+  user[roomNumber-1][1] = adults;
+  user[roomNumber-1][2] = children;
+  user[roomNumber-1][3] = boardType;
+  user[roomNumber-1][4] = newspaper;
+  user[roomNumber-1][5] = lengthOfStay;
   for (int i = 0; i < 20; i++) {
     names[roomNumber-1][0][i] = firstname[i];
     names[roomNumber-1][1][i] = surname[i];
@@ -265,6 +268,7 @@ void checkIn() {
   for (int i = 0; i < 23; i++) {
     IDs[roomNumber-1][i] = bookingID[i];
   }
+  printf("\n\n");
 }
 
 // CHECK OUT //
@@ -486,7 +490,7 @@ void bookTable() {
 }
 
 // returns 0 if the entered id does not exist, 1 if it is a user with breakfast board, and 2 if it is a user with a different board
-void checkValid(char id[23]) {
+int checkValid(char id[23]) {
   //checks if the entered id exists within the system
   for(int i=0;i<6;i++) {
     if (strcmp(id,IDs[i])==0){
@@ -496,5 +500,174 @@ void checkValid(char id[23]) {
       }
       return 2;
     }
+  }
+  return 0;
+}
+
+//displays the tables and times that are available to book
+void displayAvailableTables() {
+  int availableTables=0;
+  printf("Available tables: \n");
+  for(int i=0;i<3;i++) {
+    for(int j=0;j<2;j++) {
+      if(bookedTables[i][j][0]==0){
+        availableTables++;
+        switch(i) {
+          case 0:printf("Endor at ");
+          break;
+          case 1:printf("Naboo at ");
+          break;
+          case 2:printf("Tatooine at ");
+          break;
+          default:continue;
+
+        }
+        switch(j) {
+          case 0:printf("7 pm");
+          break;
+          case 1:printf("9 pm");
+          break;
+          default:continue;
+        }
+        printf("\n");
+      }
+    }
+  }
+  if(availableTables==0) {
+    printf("No available tables found \n");
+  }
+}
+
+//prompts the user to enter a valid table
+int inputTable() {
+  int table=0;
+  char tableInput[9];
+  do {
+
+    printf("Which table would you like to book? endor(1), naboo(2) or tatooine(3) \n");
+    fflush(stdin);
+    scanf("%8s",&tableInput);
+    for(int i=0;i<8;i++) {
+      tableInput[i]=tolower(tableInput[i]);
+    }
+    if (strncmp(tableInput,"endor",5)==0) {
+      table=1;
+    }
+    if (strncmp(tableInput,"naboo",5)==0) {
+      table=2;
+    }
+    if (strncmp(tableInput,"tatooine",8)==0) {
+      table=3;
+    }
+    if(atoi(tableInput)==1 || atoi(tableInput)==2 || atoi(tableInput)==3) {
+      table=atoi(tableInput);
+    }
+    switch(table) {
+      case 0:printf("Invalid input, please try again \n");
+      break;
+      case 1:printf("Endor selected \n");
+      break;
+      case 2:printf("Naboo selected \n");
+      break;
+      case 3:printf("Tatooine selected \n");
+      break;
+      default:continue;
+    }
+  }
+  while(table==0);
+  return table;
+}
+
+//prompts the user to enter a valid time
+int inputTime() {
+  int timeInput=0;
+  do {
+    printf("Which time would you like to book? \n 1: 7pm \n 2: 9pm \n");
+    fflush(stdin);
+    scanf("%d",&timeInput);
+    if(timeInput!=1 && timeInput!=2) {
+      printf("Invalid input, please try again \n");
+    }
+  }while(timeInput!=1 && timeInput!=2);
+  return timeInput;
+}
+
+//prompts the user for a booking id which exists in the system, and has breakfast board
+void inputId() {
+  char idInput[23];
+  int valid=0;
+  printf("Please enter booking id: \n");
+  do {
+    fflush(stdin);
+    scanf("%s[22]", &idInput);
+    if(idInput==0) {
+      valid=0;
+    }
+    else {
+      valid=checkValid(idInput);
+    }
+    if(valid==0) {
+      printf("Booking id not found, please try again \n");
+    }
+    if(valid==2) {
+      printf("User must have breakfast board, please try again \n");
+    }
+  }
+  while(valid!=1);
+  for(int i=0;i<22;i++)
+  {
+    id[i]=idInput[i];
+  }
+}
+
+//updates the list of booked tables with the entered information
+int updateTables(char id[23],int table,int time) {
+  if (bookedTables[table-1][time-1][0]==1) {
+    printf("Table already booked, please enter an available table \n");
+    return 0;
+  }
+  bookedTables[table-1][time-1][0]=1;
+  for(int i=0;i<23;i++)
+  {
+    bookedTables[table-1][time-1][i+1]=id[i];
+  }
+  printf("Table successfully booked \n\n\n\n");
+  return 1;
+}
+
+//shows which tables have been booked, and the matching booking id
+void displayBookedTables() {
+  int numberBooked=0;
+  for(int i=0;i<3;i++) {
+    for(int j=0;j<2;j++) {
+      if(bookedTables[i][j]!=0) {
+        numberBooked++;
+        switch(i) {
+          case 0:printf("Endor at ");
+          break;
+          case 1:printf("Naboo at ");
+          break;
+          case 2:printf("Tatooine at ");
+          break;
+          default:continue;
+        }
+        switch(j) {
+          case 0:printf("7 pm");
+          break;
+          case 1:printf("9 pm");
+          break;
+          default:continue;
+        }
+        printf(":booking id ");
+        for(int k=1;bookedTables[i][j][k];k++)
+        {
+          printf("%c",bookedTables[i][j][k]);
+        }
+        printf("\n");
+      }
+    }
+  }
+  if(numberBooked==0) {
+    printf("All tables available \n");
   }
 }

@@ -1,11 +1,12 @@
 # ninja log v6
 8	167	7536248278843796	CMakeFiles/Deathstar_Deluxe_HK.dir/Test.c.obj	de78e0fc8eaaf9d1
-39	283	7537294362884020	CMakeFiles/Deathstar_Deluxe_HK.dir/main.c.obj	de31943aadff4513
-229	412	7537302642260991	Deathstar_Deluxe_HK.exe	6b75072d94d0d9ee
-38	270	7537295736008722	CMakeFiles/Deathstar_Deluxe_HK.dir/Temp.c.obj	ad023a9112a3eb2a
-36	472	7537307891236085	build.ninja	2d63d840e1cf3071
-3	227	7537302639947393	CMakeFiles/Deathstar_Deluxe_HK.dir/bookTable.c.obj	e1dbeb770bdad4fd
-34	193	7537300219525126	CMakeFiles/Deathstar_Deluxe_HK.dir/checkOut.c.obj	c0774e31229d6b9e
-3	474	7537307891236085	build.ninja	2d63d840e1cf3071
 51	405	7537307893128161	CMakeFiles/Deathstar_Deluxe_HK.dir/main.c.obj	de31943aadff4513
 406	616	7537307896669451	Deathstar_Deluxe_HK.exe	bc311fecf7db0867
+38	270	7537295736008722	CMakeFiles/Deathstar_Deluxe_HK.dir/Temp.c.obj	ad023a9112a3eb2a
+3	474	7537313834690882	build.ninja	2d63d840e1cf3071
+3	227	7537302639947393	CMakeFiles/Deathstar_Deluxe_HK.dir/bookTable.c.obj	e1dbeb770bdad4fd
+34	193	7537300219525126	CMakeFiles/Deathstar_Deluxe_HK.dir/checkOut.c.obj	c0774e31229d6b9e
+33	368	7537315541383852	CMakeFiles/Deathstar_Deluxe_HK.dir/main.c.obj	de31943aadff4513
+370	583	7537315544750399	Deathstar_Deluxe_HK.exe	bc311fecf7db0867
+50	342	7537316429978192	CMakeFiles/Deathstar_Deluxe_HK.dir/main.c.obj	de31943aadff4513
+343	532	7537316432894157	Deathstar_Deluxe_HK.exe	bc311fecf7db0867
