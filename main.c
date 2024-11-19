@@ -29,8 +29,8 @@ float applyAdultMealCost(int boardType, int days, int adults, float *boardCostAd
 float applyChildrenDiscount(int boardType, int children, int days, float *boardCostChildren);
 float newspaperCostTotal(char newspaperChoice, float *newspaperCost);
 // BOOK TABLE SUBROUTINES //
-void bookTable();
-void inputId();
+int bookTable();
+int inputId();
 int checkValid(char id[23]);
 void displayAvailableTables();
 int inputTable();
@@ -186,7 +186,7 @@ void checkIn() {
   else if (newspaper == 1) { // if newspaper
     printf("Newspaper: Yes\n");
   }
-  printf("Staying for %d day(s)\nRoom Number: %d\n\n", roomNumber, lengthOfStay);
+  printf("Staying for %d day(s)\nRoom Number: %d\n\n", lengthOfStay, roomNumber);
   do {
     valid = 1;
     printf("If any details are wrong, please enter 0. If not, enter 1.\n");
@@ -461,7 +461,7 @@ float newspaperCostTotal(char newspaperChoice, float *newspaperCost) {
 
 // BOOK TABLE //
 
-void bookTable() {
+int bookTable() {
   int valid=0;
   int table=0;
   int time=0;
@@ -472,13 +472,15 @@ void bookTable() {
   fflush(stdin);
   scanf("%d",&choice);
   if(choice==2) {
-    exit(0);
+    return 0;
   }
   if (choice==0) {
     displayBookedTables();
   }
   if(choice==1) {
-    inputId();
+    if (inputId() == -1) {
+      return 0;
+    }
     //this loop checks if the selected table is already booked based on the value returned by updateTables() function
     do {
       displayAvailableTables();
@@ -487,6 +489,7 @@ void bookTable() {
       valid=updateTables(id,table,time);
     }while(valid!=1);
   }
+  return 0;
 }
 
 // returns 0 if the entered id does not exist, 1 if it is a user with breakfast board, and 2 if it is a user with a different board
@@ -495,13 +498,13 @@ int checkValid(char id[23]) {
   for(int i=0;i<6;i++) {
     if (strcmp(id,IDs[i])==0){
       // checks the board of the user
-      if(user[i][3]==2) {
-        return 1;
+      if(user[i][3]==3) {
+        return 1; // if B&B, return 1
       }
-      return 2;
+      return 2; // if valid, but any other board
     }
   }
-  return 0;
+  return 0; // if invalid ID
 }
 
 //displays the tables and times that are available to book
@@ -593,31 +596,33 @@ int inputTime() {
 }
 
 //prompts the user for a booking id which exists in the system, and has breakfast board
-void inputId() {
+int inputId() {
   char idInput[23];
   int valid=0;
-  printf("Please enter booking id: \n");
+  printf("Please enter booking id or enter QUIT to quit: \n");
   do {
     fflush(stdin);
     scanf("%s[22]", &idInput);
     if(idInput==0) {
       valid=0;
     }
+    if(strcmp(idInput,"QUIT")==0) {
+      return -1;
+    }
     else {
-      valid=checkValid(idInput);
+      valid = checkValid(idInput);
     }
     if(valid==0) {
       printf("Booking id not found, please try again \n");
     }
-    if(valid==2) {
-      printf("User must have breakfast board, please try again \n");
+    if(valid==1) {
+      printf("User must not have breakfast board, please try again \n");
     }
-  }
-  while(valid!=1);
-  for(int i=0;i<22;i++)
-  {
+  } while(valid!=2);
+  for(int i=0;i<22;i++) {
     id[i]=idInput[i];
   }
+  return 0;
 }
 
 //updates the list of booked tables with the entered information
