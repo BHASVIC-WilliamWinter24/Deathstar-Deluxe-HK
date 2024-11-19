@@ -4,7 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 
-int users[6][6] = {{0, 0, 0, 0, 0, 0}, // Room 1: dateOfBirth, adults, children, boardType, newspaper, lengthOfStay
+int users[6][6] = {{0, 0, 0, 0, 0, 0}, // Room 1: dateOfBirth, adults, children, boardType, newspaperChoice, days
                   {0, 0, 0, 0, 0, 0},  // Room 2
                   {0, 0, 0, 0, 0, 0},  // Room 3
                   {0, 0, 0, 0, 0, 0},  // Room 4
@@ -25,10 +25,10 @@ void checkIn() {
   char firstname[20], surname[20];
   memset(firstname, 0, strlen(firstname)); // sets firstname to empty
   char bookingID[23]; // max length of surname + 6 random digits
-  int dateOfBirth, adults, children, boardType, lengthOfStay, newspaper, roomNumber;
+  int dateOfBirth, adults, children, boardType, days, newspaperChoice, roomNumber;
   int valid; // for validation checks
   int complete; // to finalise data
-  printf("----CHECK IN----\n\n");
+  printf("\n\n\n----CHECK IN----\n\n");
   printf("Enter your first name (20 chars cutoff): ");
   fflush(stdin);
   fgets(firstname, 20, stdin); // takes input of max 20 to firstname
@@ -75,13 +75,13 @@ void checkIn() {
   } while (valid == 0); // loop while invalid
   printf("\nHow long is your stay in days? ");
   fflush(stdin);
-  scanf("%d", &lengthOfStay); // take length of stay input
+  scanf("%d", &days); // take length of stay input
   do {
     valid = 1;
-    printf("\nIf you would like a newspaper, enter 1. If not, enter 0.");
+    printf("\nIf you would like a newspaperChoice, enter 1. If not, enter 0.");
     fflush(stdin);
-    scanf("%d", &newspaper); // take input to newspaper
-    if (newspaper != 0 && newspaper != 1) { // if neither 0 nor 1 entered
+    scanf("%d", &newspaperChoice); // take input to newspaperChoice
+    if (newspaperChoice != 0 && newspaperChoice != 1) { // if neither 0 nor 1 entered
       printf("Invalid input. Please enter 0 or 1.");
       valid = 0;
     }
@@ -119,14 +119,14 @@ void checkIn() {
       valid = 0; // invalid
     }
     else {
-      if (users[roomNumber-1][5] != 0) { // if lengthOfStay for that room is not zero - it is in use
+      if (users[roomNumber-1][5] != 0) { // if days for that room is not zero - it is in use
         printf("Room number %d is already in use", roomNumber);
         valid = 0; // invalid
       }
     }
   } while (valid == 0);  // loops while invalid
   printf("\n\n--Check In complete!--\nData is as follows:\n");
-  printf("User: %s %sDate of Birth: %d\nGuests: %d adults & %d child(ren)\n", firstname, surname, dateOfBirth, adults, children);
+  printf("Firstname: %sSurname: %sDate of Birth: %d\nGuests: %d adults & %d child(ren)\n", firstname, surname, dateOfBirth, adults, children);
   if (boardType == 1) { // if board is FB
     printf("Board: Full Board\n");
   }
@@ -136,13 +136,13 @@ void checkIn() {
   else if (boardType == 3) { // if board is B&B
     printf("Board: Bed & Breakfast\n");
   }
-  if (newspaper == 0) { // if no newspaper
-    printf("Newspaper: No\n");
+  if (newspaperChoice == 0) { // if no newspaperChoice
+    printf("newspaperChoice: No\n");
   }
-  else if (newspaper == 1) { // if newspaper
-    printf("Newspaper: Yes\n");
+  else if (newspaperChoice == 1) { // if newspaperChoice
+    printf("newspaperChoice: Yes\n");
   }
-  printf("Staying for %d day(s)\n\n", lengthOfStay);
+  printf("Staying for %d day(s)\nRoom Number: %d\n\n", roomNumber, days);
   do {
     valid = 1;
     printf("If any details are wrong, please enter 0. If not, enter 1.\n");
@@ -215,8 +215,8 @@ void checkIn() {
   users[roomNumber-1][1] = adults;
   users[roomNumber-1][2] = children;
   users[roomNumber-1][3] = boardType;
-  users[roomNumber-1][4] = newspaper;
-  users[roomNumber-1][5] = lengthOfStay;
+  users[roomNumber-1][4] = newspaperChoice;
+  users[roomNumber-1][5] = days;
   for (int i = 0; i < 20; i++) {
     names[roomNumber-1][0][i] = firstname[i];
     names[roomNumber-1][1][i] = surname[i];
