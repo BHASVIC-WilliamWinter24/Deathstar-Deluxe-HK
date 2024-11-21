@@ -1,3 +1,0 @@
-C:/Users/wwint/Downloads/Deathstar-Deluxe-HK/cmake-build-debug/CMakeFiles/Deathstar_Deluxe_HK.dir
-C:/Users/wwint/Downloads/Deathstar-Deluxe-HK/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/wwint/Downloads/Deathstar-Deluxe-HK/cmake-build-debug/CMakeFiles/rebuild_cache.dir

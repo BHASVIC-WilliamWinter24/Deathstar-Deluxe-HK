@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <ctype.h>
 
-int user[6][6] = {{0, 0, 0, 0, 0, 0}, // Room 1: dateOfBirth, adults, children, boardType, newspaper, lengthOfStay
+int user[6][6] = {{121212, 2, 2, 1, 1, 5}, // Room 1: dateOfBirth, adults, children, boardType, newspaper, lengthOfStay
                   {0, 0, 0, 0, 0, 0},  // Room 2
                   {0, 0, 0, 0, 0, 0},  // Room 3
                   {0, 0, 0, 0, 0, 0},  // Room 4
@@ -22,7 +22,6 @@ char id[23]; // for bookTable
 void checkIn();
 // CHECK OUT SUBROUTINES //
 void checkOut();
-int getBoardType(int *boardType);
 void calculateRoomCost(int roomNumber, float *roomCost, int days);
 float applyMainUserDiscount(float *finalRoomCost, int mainUserAge, float roomCost);
 float applyAdultMealCost(int boardType, int days, int adults, float *boardCostAdult);
@@ -265,6 +264,7 @@ void checkIn() {
     names[roomNumber-1][0][i] = firstname[i];
     names[roomNumber-1][1][i] = surname[i];
   }
+  roomNumber =1;
   for (int i = 0; i < 23; i++) {
     IDs[roomNumber-1][i] = bookingID[i];
   }
@@ -277,21 +277,40 @@ void checkOut() {
   int roomNumber, mainUserAge, children, days, adults, boardType;
   float roomCost, finalRoomCost, boardCostAdult, totalBoardCost, boardCostChildren = 0, finalBill, newspaperCost = 0.0;
   char newspaperChoice;
-  int bookingID;
+  char bookingID[23];
+  int valid; // for validation checks
+
 
   // Collecting booking ID and days stayed
-  printf("Enter main user's booking ID (4 digits): ");
-  fflush(stdin);
-  scanf("%d", &bookingID);
+  do {
+    valid = 0;
+    printf("Enter main user's booking ID: ");
+    fflush(stdin);
+    scanf("%s[22]", &bookingID);
+    for(int i=0; i<6; i++) {
+      if (strcmp(bookingID,IDs[i])==0) {
+        roomNumber = i+1;
+        printf("Valid ID entered\n");
+        valid = 1;
+      }
+    }
+    if (valid == 0) {
+      printf("Invalid ID entered.\n");
+    }
+  } while (valid == 0);
 
-  printf("Enter how many days you have stayed: ");
-  fflush(stdin);
-  scanf("%d", &days);
+  roomNumber = 1;
+
+  // declare variables
+  days = user[roomNumber-1][5];
+  children = user[roomNumber-1][2];
+  adults = user[roomNumber-1][1];
+  boardType = user[roomNumber-1][3];
+  newspaperChoice = user[roomNumber-1][4];
 
   // Function calls to collect information and calculate costs
   calculateRoomCost(roomNumber, &roomCost, days);
   applyMainUserDiscount(&finalRoomCost, mainUserAge, roomCost);
-  getBoardType(&boardType);
   applyChildrenDiscount(boardType, children, days, &boardCostChildren);
   applyAdultMealCost(boardType, days, adults, &boardCostAdult);
   newspaperCostTotal(newspaperChoice, &newspaperCost);
@@ -304,43 +323,34 @@ void checkOut() {
 
   // Displaying the final bill information
   printf("\n-------- Billing Information --------\n");
-  printf("+----------------------------------+\n");
-  printf("| Booking ID:              %-6d |\n", bookingID);
-  printf("| Room Cost:            C%7.2f |\n", finalRoomCost);
-  printf("| Adult Meal Cost:      C%7.2f |\n", boardCostAdult);
-  printf("| Children Meal Cost:   C%7.2f |\n", boardCostChildren);
-  printf("| Newspaper Cost:       C%7.2f |\n", newspaperCost);
-  printf("+----------------------------------+\n");
-  printf("| Total Final Bill:     C%7.2f |\n", finalBill);
-  printf("+----------------------------------+\n");
-}
+  printf("+------------------------------------+\n");
+  printf("| Booking ID:%23s |\n", bookingID);
+  printf("| Room Cost:            C%11.2f |\n", finalRoomCost);
+  printf("| Adult Meal Cost:      C%11.2f |\n", boardCostAdult);
+  printf("| Children Meal Cost:   C%11.2f |\n", boardCostChildren);
+  printf("| Newspaper Cost:       C%11.2f |\n", newspaperCost);
+  printf("+------------------------------------+\n");
+  printf("| Total Final Bill:     C%11.2f |\n", finalBill);
+  printf("+------------------------------------+\n");
+  printf("Hope you had a good stay here at Hotel Kashyyyk!\nCome back soon!!!\n\n\n");
 
-// Function to get board type and ensure valid input
-int getBoardType(int *boardType) {
-  do {
-    printf("Enter the board type (1 for Full Board, 2 for Half Board, 3 for Bed and Breakfast): ");
-    fflush(stdin);
-    scanf("%d", boardType);
-    // Validate the board type input
-    if (*boardType < 1 || *boardType > 3) {
-      printf("Invalid board type. Please enter 1, 2, or 3.\n");
+  // removes data for checked out user
+  for (int i = 0; i < 6; i++) {
+    user[roomNumber-1][i] = 0; // user int array
+  }
+  for (int j = 0; j < 2; j++) {
+    for (int k = 0; k < 20; k++) {
+      names[roomNumber-1][j][k] = '\000'; // names array
     }
-  } while (*boardType < 1 || *boardType > 3);
-  return *boardType;
+  }
+  for (int l = 0; l < 23; l++) {
+    IDs[roomNumber-1][l];
+  }
+
 }
 
 // Function to calculate the room cost based on room number
 void calculateRoomCost(int roomNumber, float *roomCost, int days) {
-  do {
-    printf("Enter the room number your stay was in (1-6): ");
-    fflush(stdin);
-    scanf("%d", &roomNumber);
-    // Validate room number input
-    if (roomNumber > 6 || roomNumber < 1) {
-      printf("Error: Room number must be between 1 and 6.\n");
-    }
-  } while (roomNumber > 6 || roomNumber < 1);
-
   printf("The room number of your stay is: %d\n", roomNumber);
 
   // Assign room cost based on room number
@@ -358,7 +368,7 @@ void calculateRoomCost(int roomNumber, float *roomCost, int days) {
 // Function to apply a discount based on the main user's age
 float applyMainUserDiscount(float *finalRoomCost, int mainUserAge, float roomCost) {
   do {
-    printf("Enter the main user's age (must be at least 18): ");
+    printf("\nEnter the main user's age (must be at least 18): ");
     fflush(stdin);
     scanf("%d", &mainUserAge);
     // Ensure the main user's age is at least 18
@@ -381,17 +391,7 @@ float applyMainUserDiscount(float *finalRoomCost, int mainUserAge, float roomCos
 
 // Function to calculate adult meal costs based on board type and number of guests
 float applyAdultMealCost(int boardType, int days, int adults, float *boardCostAdult) {
-  do {
-    printf("How many adults are in your group: ");
-    fflush(stdin);
-    scanf("%d", &adults);
-    // Ensure at least one adult is in the group
-    if (adults <= 0) {
-      printf("Invalid number. There must be at least one adult.\n");
-    }
-  } while (adults <= 0);
-
-  printf("You have %d adult guests.\n", adults);
+  printf("\nYou have %d adult guests.\n", adults);
 
   // Calculate the meal costs for adults based on board type
   if (boardType == 1) {
@@ -408,18 +408,8 @@ float applyAdultMealCost(int boardType, int days, int adults, float *boardCostAd
 
 // Function to apply a discount for children’s meal costs based on board type
 float applyChildrenDiscount(int boardType, int children, int days, float *boardCostChildren) {
-  do {
-    printf("How many children are in your group: ");
-    fflush(stdin);
-    scanf("%d", &children);
-    // Ensure the number of children is non-negative
-    if (children < 0) {
-      printf("Invalid number. Please enter 0 or a positive number.\n");
-    }
-  } while (children < 0);
-
   if (children > 0) {
-    printf("You are eligible for a 50%% discount on each of your children's meal board cost.\n");
+    printf("\nYou are eligible for a 50%% discount on each of your children's meal board cost.\n");
 
     // Calculate the meal cost for children based on board type and apply the discount
     if (boardType == 1) {
@@ -440,22 +430,12 @@ float applyChildrenDiscount(int boardType, int children, int days, float *boardC
 
 // Function to handle the newspaper cost based on user choice
 float newspaperCostTotal(char newspaperChoice, float *newspaperCost) {
-  do {
-    printf("Have you bought a newspaper (Y/N): ");
-    fflush(stdin);
-    scanf(" %c", &newspaperChoice);
-
-    if (newspaperChoice == 'Y' || newspaperChoice == 'y') {
-      *newspaperCost = 5.50;
-      break;
-    } else if (newspaperChoice == 'N' || newspaperChoice == 'n') {
-      *newspaperCost = 0.00;
-      break;
-    } else {
-      printf("Invalid input. Please enter 'Y' for yes or 'N' for no.\n");
-    }
-  } while (1);
-
+  if (newspaperChoice == 0) {
+    *newspaperCost = 0.00;
+  }
+  else if (newspaperChoice == 1) {
+    *newspaperCost = 5.50;
+  }
   return *newspaperCost;
 }
 

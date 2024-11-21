@@ -1,4 +1,6 @@
-"C:\Users\wwint\CLion 2024.2.1\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Users/wwint/CLion 2024.2.1/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\wwint\Downloads\Deathstar-Deluxe-HK -B C:\Users\wwint\Downloads\Deathstar-Deluxe-HK\cmake-build-debug
--- Configuring done (0.3s)
--- Generating done (0.0s)
--- Build files have been written to: C:/Users/wwint/Downloads/Deathstar-Deluxe-HK/cmake-build-debug
+"C:\Program Files (x86)\JetBrains\CLion 2024.1.4\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Program Files (x86)/JetBrains/CLion 2024.1.4/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\william.winter24\Downloads\Deathstar-Deluxe-HK -B C:\Users\william.winter24\Downloads\Deathstar-Deluxe-HK\cmake-build-debug
+CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
+  CMake 3.29 or higher is required.  You are running version 3.28.1
+
+
+-- Configuring incomplete, errors occurred!
