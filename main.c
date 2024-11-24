@@ -290,7 +290,7 @@ void checkOut() {
     scanf("%s[22]", &bookingID);
     for(int i=0; i<6; i++) {
       if (strcmp(bookingID,IDs[i])==0) {
-        roomNumber = i+1;
+        roomNumber = i + 1;
         printf("Valid ID entered\n");
         valid = 1;
       }
@@ -299,8 +299,6 @@ void checkOut() {
       printf("Invalid ID entered.\n");
     }
   } while (valid == 0);
-
-  roomNumber = 1;
 
   // declare variables
   days = user[roomNumber-1][5];
