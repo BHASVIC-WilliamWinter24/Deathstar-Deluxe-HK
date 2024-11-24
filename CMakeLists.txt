@@ -3,4 +3,4 @@ project(Deathstar_Deluxe_HK C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(Deathstar_Deluxe_HK checkOut.c)
+add_executable(Deathstar_Deluxe_HK main.c)
